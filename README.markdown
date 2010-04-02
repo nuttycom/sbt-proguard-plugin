@@ -25,6 +25,14 @@ If you need make modifications to the plugin itself, you can compile and install
     $ cd sbt-proguard-plugin
     $ sbt publish-local    
 
+##License
+
+This plugin depends upon ProGuard (http://proguard.sourceforge.net/), 
+which is licensed under the GNU General Public License version 2.0.
+As such, this plugin is distributed under the same license; you are 
+free to use and modify this work so long as any derivative work complies 
+with the distribution terms. See LICENSE for additional information.
+
 ##Credits
 
 This code is based on work by Jan Berkel for the SBT android plugin
