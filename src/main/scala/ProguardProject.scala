@@ -47,7 +47,7 @@ abstract class ProguardProject(info: ProjectInfo) extends DefaultProject(info) {
 
   def proguardKeepSerializability = "-keep class * implements java.io.Serializable { *; }"
 
-  def proguardKeepAllScala = "keep class scala.** { *; }"
+  def proguardKeepAllScala = "-keep class scala.** { *; }"
 
   def proguardInJarsArg = {
     val inPaths = proguardInJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values
