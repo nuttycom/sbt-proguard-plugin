@@ -1,6 +1,6 @@
 import sbt._
 
-class ProguardPlugin(info: ProjectInfo) extends PluginProject(info) with posterous.Publish {
+class ProguardPlugin(info: ProjectInfo) extends PluginProject(info) {
   val proguard = "net.sf.proguard" % "proguard" % "4.4" % "compile"
 
   override def managedStyle = ManagedStyle.Maven
