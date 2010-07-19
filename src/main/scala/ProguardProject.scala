@@ -7,11 +7,14 @@ object ProguardProject {
   val Description = "Aggregate and minimize the project's files and all dependencies into a single jar."
 }
 
-abstract class ProguardProject(info: ProjectInfo) extends DefaultProject(info) {
+trait ProguardProject { this: DefaultProject => 
   def minJarName = artifactBaseName + ".min.jar"
   def minJarPath = outputPath / minJarName
   def rtJarPath = Path.fromFile(System.getProperty("java.home")) / "lib" / "rt.jar"
 
+  private implicit def pathEscape(p: Path) = new {
+    def escaped: String = p.absolutePath.replaceAll("\\s", "\\ ")
+  }
 
   def proguardOptions: List[String] = Nil
 
@@ -51,15 +54,14 @@ abstract class ProguardProject(info: ProjectInfo) extends DefaultProject(info) {
 
   def proguardInJarsArg = {
     val inPaths = proguardInJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values
-    "-injars" :: (List(jarPath.absolutePath).elements ++ inPaths.map(_.absolutePath+"(!META-INF/MANIFEST.MF)")).mkString(File.pathSeparator) :: Nil
+    "-injars" :: (List(jarPath.escaped).elements ++ inPaths.map(_.escaped+"(!META-INF/MANIFEST.MF)")).mkString(File.pathSeparator) :: Nil
   }
 
-  def proguardOutJarsArg = "-outjars" :: minJarPath.absolutePath :: Nil
+  def proguardOutJarsArg = "-outjars" :: minJarPath.escaped :: Nil
 
   def proguardLibJarsArg = {
-    println(proguardLibraryJars.get)
     val libPaths = proguardLibraryJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values
-    if (libPaths.hasNext) "-libraryjars" :: libPaths.mkString(File.pathSeparator) :: Nil else Nil
+    if (libPaths.hasNext) "-libraryjars" :: libPaths.map(_.escaped).mkString(File.pathSeparator) :: Nil else Nil
   }
 
   def proguardDefaultArgs = "-dontwarn" :: "-dontoptimize" :: "-dontobfuscate" :: proguardOptions 
