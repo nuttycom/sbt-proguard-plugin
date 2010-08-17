@@ -13,7 +13,7 @@ trait ProguardProject { this: DefaultProject =>
   def rtJarPath = Path.fromFile(System.getProperty("java.home")) / "lib" / "rt.jar"
 
   private implicit def pathEscape(p: Path) = new {
-    def escaped: String = p.absolutePath.replaceAll("\\s", "\\ ")
+    def escaped: String = '"' + p.absolutePath.replaceAll("\\s", "\\ ") + '"'
   }
 
   def proguardOptions: List[String] = Nil
