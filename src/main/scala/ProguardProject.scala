@@ -36,7 +36,7 @@ trait ProguardProject { this: DefaultProject =>
   //def proguardInJars = runClasspath --- proguardExclude
   def proguardInJars      = ((compileClasspath +++ allDependencyJars) ** "*.jar") --- jarPath --- proguardExclude
   def proguardExclude     = proguardLibraryJars +++ mainCompilePath +++ mainResourcesPath +++ managedClasspath(Configurations.Provided) 
-  def proguardLibraryJars = rtJarPath
+  def proguardLibraryJars = (rtJarPath :PathFinder)
 
   def proguardKeepLimitedSerializability = """
     -keepclassmembers class * implements java.io.Serializable {
