@@ -60,14 +60,14 @@ If you need make modifications to the plugin itself, you can compile and install
 
     $ git clone git://github.com/nuttycom/sbt-proguard-plugin.git
     $ cd sbt-proguard-plugin
-    $ sbt publish-local    
+    $ sbt update publish-local
 
 ##License
 
-This plugin depends upon ProGuard (http://proguard.sourceforge.net/), 
+This plugin depends upon ProGuard (http://proguard.sourceforge.net/),
 which is licensed under the GNU General Public License version 2.0.
-As such, this plugin is distributed under the same license; you are 
-free to use and modify this work so long as any derivative work complies 
+As such, this plugin is distributed under the same license; you are
+free to use and modify this work so long as any derivative work complies
 with the distribution terms. See LICENSE for additional information.
 
 ##Credits
