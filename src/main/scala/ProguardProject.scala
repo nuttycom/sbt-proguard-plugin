@@ -73,6 +73,7 @@ trait ProguardProject { this: DefaultProject =>
   def proguardTask = task {
     val args = proguardInJarsArg ::: proguardOutJarsArg ::: proguardLibJarsArg ::: proguardDefaultArgs
     val config = new ProGuardConfiguration
+    log.debug("Proguard args: " + args)
     new ConfigurationParser(args.toArray[String], info.projectPath.asFile).parse(config)
     new ProGuard(config).execute
     None
