@@ -53,7 +53,8 @@ trait ProguardProject { this: DefaultProject =>
 
   def proguardKeepAllScala = "-keep class scala.** { *; }"
 
-  def proguardKeepMains = "-keep public class * { static void main(java.lang.String[]); }"
+  def proguardKeepMain (name :String) =
+    "-keep public class " + name + " { static void main(java.lang.String[]); }"
 
   def proguardInJarsArg = {
     val inPaths = proguardInJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values

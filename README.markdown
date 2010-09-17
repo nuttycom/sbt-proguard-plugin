@@ -36,11 +36,11 @@ they are used), use the following option:
       proguardKeepAllScala
     )
 
-If you wish to keep your `main()` entry points, use:
+If you wish to keep the `main()` entry point of a class, use:
 
     override def proguardOptions = List(
       ...,
-      proguardKeepMains
+      proguardKeepMain("somepackage.SomeClass")
     )
 
 If you wish to keep everything that is `Serializable`, use:
