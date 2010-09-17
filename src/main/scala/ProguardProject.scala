@@ -25,6 +25,7 @@ trait ProguardProject { this: DefaultProject =>
   } catch {
     case e: NoSuchMethodException => FileUtilities.scalaLibraryJar
   }
+  def scalaLibraryPath = Path.fromFile(scalaLibraryJar)
 
   def allDependencyJars = Path.lazyPathFinder { 
     topologicalSort.flatMap { 

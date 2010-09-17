@@ -23,8 +23,13 @@ in `target/project_vers.min.jar`.
 
 ##Examples
 
-The plugin provides a few standard options to make your life easier. If you
-wish to keep all Scala classes, use the following:
+If your project is a Scala project, you will need to add the Scala library to
+the set of input jar files. Do so as follows:
+
+    override def proguardInJars = super.proguardInJars +++ scalaLibraryPath
+
+If you wish to include all Scala classes in your output (regardless of whether
+they are used), use the following option:
 
     override def proguardOptions = List(
       ...,
