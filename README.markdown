@@ -12,7 +12,6 @@ To use the plugin in a project, you need to create `project/plugins/Plugins.scal
 and modify your project definition in `project/build/Project`. For example:
 
     import sbt._
-
     class Project(info: ProjectInfo) extends DefaultProject(info) with ProguardProject {
       override def proguardOptions = List(
         "-keep class MyClass { myMethod; }"
