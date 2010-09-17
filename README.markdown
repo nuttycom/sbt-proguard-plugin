@@ -1,12 +1,12 @@
 ##Usage
 
-Requires [sbt](http://simple-build-tool.googlecode.com/)
+Requires [SBT](http://simple-build-tool.googlecode.com/).
 
 To use the plugin in a project, you need to create `project/plugins/Plugins.scala`:
 
     import sbt._
     class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
-      val proguard = "org.scala-tools.sbt" % "sbt-proguard-plugin" % "0.0.1"
+      val proguard = "org.scala-tools.sbt" % "sbt-proguard-plugin" % "0.0.+"
     }
 
 and modify your project definition in `project/build/Project`. For example:
