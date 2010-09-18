@@ -57,6 +57,21 @@ add them to the list of `-libraryjars` passed to Proguard), do the following:
     val jarToExclude = "lib_extra" / "mylib.jar"
     override def proguardLibraryJars = super.proguardLibraryJars +++ jarToExclude
 
+By default all jar files passed to Proguard (except for the one that contains
+your project's classes) are filtered using
+`somejar.jar(!META-INF/MANIFEST.MF)`. This is necessary to prevent conflicts
+when Proguard generates a single final jar. If you wish to filter other
+resources from a jar file, do the following:
+
+    override makeInJarFilter (file :String) = file match {
+      case "some-special.jar" => super.makeInJarFilter(file) + ",!images/**"
+      case _ => super.makeInJarFilter(file)
+    }
+
+The argument to `makeJarFilter` will be the filename of the jar file in
+question (minus any path). Note that your project's jar file is always included
+without any filtering.
+
 Other customizations are possible, take a look at the source to [ProguardProject](http://github.com/nuttycom/sbt-proguard-plugin/tree/master/src/main/scala/ProguardProject.scala).
 
 ##Hacking on the plugin

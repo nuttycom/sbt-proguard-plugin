@@ -56,9 +56,11 @@ trait ProguardProject { this: DefaultProject =>
   def proguardKeepMain (name :String) =
     "-keep public class " + name + " { static void main(java.lang.String[]); }"
 
+  def makeInJarFilter (file :String) = "!META-INF/MANIFEST.MF"
+
   def proguardInJarsArg = {
     val inPaths = proguardInJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values
-    "-injars" :: (List(jarPath.escaped).elements ++ inPaths.map(_.escaped+"(!META-INF/MANIFEST.MF)")).mkString(File.pathSeparator) :: Nil
+    "-injars" :: (List(jarPath.escaped).elements ++ inPaths.map(p => p.escaped+"("+makeInJarFilter(p.asFile.getName)+")")).mkString(File.pathSeparator) :: Nil
   }
 
   def proguardOutJarsArg = "-outjars" :: minJarPath.escaped :: Nil
