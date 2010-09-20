@@ -25,6 +25,7 @@ trait ProguardProject { this: DefaultProject =>
   } catch {
     case e: NoSuchMethodException => FileUtilities.scalaLibraryJar
   }
+  def scalaLibraryPath = Path.fromFile(scalaLibraryJar)
 
   def allDependencyJars = Path.lazyPathFinder { 
     topologicalSort.flatMap { 
@@ -36,7 +37,7 @@ trait ProguardProject { this: DefaultProject =>
   //def proguardInJars = runClasspath --- proguardExclude
   def proguardInJars      = ((compileClasspath +++ allDependencyJars) ** "*.jar") --- jarPath --- proguardExclude
   def proguardExclude     = proguardLibraryJars +++ mainCompilePath +++ mainResourcesPath +++ managedClasspath(Configurations.Provided) 
-  def proguardLibraryJars = rtJarPath
+  def proguardLibraryJars = (rtJarPath :PathFinder)
 
   def proguardKeepLimitedSerializability = """
     -keepclassmembers class * implements java.io.Serializable {
@@ -52,9 +53,14 @@ trait ProguardProject { this: DefaultProject =>
 
   def proguardKeepAllScala = "-keep class scala.** { *; }"
 
+  def proguardKeepMain (name :String) =
+    "-keep public class " + name + " { static void main(java.lang.String[]); }"
+
+  def makeInJarFilter (file :String) = "!META-INF/MANIFEST.MF"
+
   def proguardInJarsArg = {
     val inPaths = proguardInJars.get.foldLeft(Map.empty[String, Path])((m, p) => m + (p.asFile.getName -> p)).values
-    "-injars" :: (List(jarPath.escaped).elements ++ inPaths.map(_.escaped+"(!META-INF/MANIFEST.MF)")).mkString(File.pathSeparator) :: Nil
+    "-injars" :: (List(jarPath.escaped).elements ++ inPaths.map(p => p.escaped+"("+makeInJarFilter(p.asFile.getName)+")")).mkString(File.pathSeparator) :: Nil
   }
 
   def proguardOutJarsArg = "-outjars" :: minJarPath.escaped :: Nil
@@ -71,6 +77,7 @@ trait ProguardProject { this: DefaultProject =>
   def proguardTask = task {
     val args = proguardInJarsArg ::: proguardOutJarsArg ::: proguardLibJarsArg ::: proguardDefaultArgs
     val config = new ProGuardConfiguration
+    log.debug("Proguard args: " + args)
     new ConfigurationParser(args.toArray[String], info.projectPath.asFile).parse(config)
     new ProGuard(config).execute
     None
