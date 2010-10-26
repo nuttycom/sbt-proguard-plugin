@@ -6,7 +6,7 @@ To use the plugin in a project, you need to create `project/plugins/Plugins.scal
 
     import sbt._
     class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
-      val proguard = "org.scala-tools.sbt" % "sbt-proguard-plugin" % "0.0.+"
+      val proguard = "org.scala-tools.sbt" % "sbt-proguard-plugin" % "0.0.5"
     }
 
 and modify your project definition in `project/build/Project`. For example:
