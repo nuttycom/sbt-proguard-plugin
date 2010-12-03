@@ -5,12 +5,22 @@ import Process._
 
 object ProguardProject {
   val Description = "Aggregate and minimize the project's files and all dependencies into a single jar."
+  def rtJarPath = {
+    val javaHome = System.getProperty("java.home")
+    val stdLocation = Path.fromFile(javaHome) / "lib" / "rt.jar"
+    val osXLocation = Path.fromFile(new java.io.File(javaHome).getParent()) / "Classes"/ "classes.jar"
+    if (stdLocation.asFile.exists())
+      stdLocation
+    else if (osXLocation.asFile.exists())
+      osXLocation
+    else
+      throw new IllegalStateException("Unknown location for rt.jar")
+  }
 }
 
 trait ProguardProject { this: DefaultProject => 
   def minJarName = artifactBaseName + ".min.jar"
   def minJarPath = outputPath / minJarName
-  def rtJarPath = Path.fromFile(System.getProperty("java.home")) / "lib" / "rt.jar"
 
   private implicit def pathEscape(p: Path) = new {
     def escaped: String = '"' + p.absolutePath.replaceAll("\\s", "\\ ") + '"'
@@ -37,7 +47,7 @@ trait ProguardProject { this: DefaultProject =>
   //def proguardInJars = runClasspath --- proguardExclude
   def proguardInJars      = ((compileClasspath +++ allDependencyJars) ** "*.jar") --- jarPath --- proguardExclude
   def proguardExclude     = proguardLibraryJars +++ mainCompilePath +++ mainResourcesPath +++ managedClasspath(Configurations.Provided) 
-  def proguardLibraryJars = (rtJarPath :PathFinder)
+  def proguardLibraryJars = (ProguardProject.rtJarPath :PathFinder)
 
   def proguardKeepLimitedSerializability = """
     -keepclassmembers class * implements java.io.Serializable {
