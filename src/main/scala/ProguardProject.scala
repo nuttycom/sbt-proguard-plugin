@@ -7,7 +7,7 @@ object ProguardProject {
   val Description = "Aggregate and minimize the project's files and all dependencies into a single jar."
 }
 
-trait ProguardProject { this: DefaultProject => 
+trait ProguardProject { this: Project with ManagedProject with BasicScalaProject with MavenStyleScalaPaths => 
   def minJarName = artifactBaseName + ".min.jar"
   def minJarPath = outputPath / minJarName
   def rtJarPath = Path.fromFile(System.getProperty("java.home")) / "lib" / "rt.jar"
