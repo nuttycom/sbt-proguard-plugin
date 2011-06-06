@@ -1,6 +1,6 @@
 ##Usage
 
-Requires [SBT](http://simple-build-tool.googlecode.com/).
+Requires [SBT](http://simple-build-tool.googlecode.com/). For SBT 0.9.0 and higher, please see siasia's version for XSBT: https://github.com/siasia/xsbt-proguard-plugin.git
 
 To use the plugin in a project, you need to create `project/plugins/Plugins.scala`:
 
